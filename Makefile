@@ -1,4 +1,5 @@
 #Makefile for Salesmen game
+.DEFAULT_GOAL := main
 
 #g++ compiler
 CC = g++
@@ -7,6 +8,7 @@ CFLAGS = -g -Wall
 LDFLAGS = -lncurses
 HEADER = account.h gui.h inventory.h item.h screen.h
 OBJ = account.o gui.o inventory.o item.o screen.o
+CPPFILES =account.cpp gui.cpp inventory.cpp item.cpp screen.cpp
 
 test: test.o $(OBJ)
 	$(CC) $(CFLAGS) test.o $(OBJ) -o test $(LDFLAGS)
@@ -20,8 +22,8 @@ main: main.o $(OBJ)
 main.o: main.cpp $(HEADER)
 	$(CC) $(CFLAGS) -c main.cpp $(LDFLAGS)
 
-$(OBJ): %.c $(HEADER)
-		  $(CC) $(CFLAGS) -c %.c $(LDFLAGS)
+$(OBJ): $(CPPFILES) $(HEADER)
+		  $(CC) $(CFLAGS) -c $(CPPFILES)  $(LDFLAGS)
 
 clean:
 	rm *.o
