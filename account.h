@@ -1,0 +1,4 @@
+#ifndef HEADER_ACCOUNT
+#define HEADER_ACCOUNT 
+
+#endif // !HEADER_ACCOUNT

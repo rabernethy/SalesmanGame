@@ -1,0 +1,4 @@
+#ifndef HEADER_INVENTORY
+#define HEADER_INVENTORY
+
+#endif // !HEADER_INVENTORY
