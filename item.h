@@ -15,6 +15,7 @@ class Item {
 	Item(std::string name, int price, int chance, int fluctuation);
 	std::string serialize();
 	int genPrice();
+	bool equals(Item item);
 };
 
 #endif // !HEADER_ITEM

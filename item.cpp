@@ -23,3 +23,9 @@ int Item::genPrice() {
 	return (rand()%2) ? (1):(-1) * (rand() % fluctuation) + price;
 }
 
+bool Item::equals(Item item) {
+	if(name != item.name || price != item.price)
+		return false;
+	return true;
+}
+
