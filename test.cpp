@@ -27,7 +27,7 @@ int main(int argc, char ** argv) {
 
 	// Account tests:
 	Account acc1(10000, inv);
-	Account acc2(1000);
+	Account acc2(inv);
 
 	printf("Account 1: \n%s\n", acc1.toString().c_str());
 	printf("Account 2: \n%s\n", acc2.toString().c_str());
