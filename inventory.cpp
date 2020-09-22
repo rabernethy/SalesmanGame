@@ -7,9 +7,16 @@
 
 using namespace std;
 
-Inventory::Inventory() {}
+Inventory::Inventory() {
+    size = 0;
+}
 Inventory::Inventory(int maxCapacity) {
     cap = maxCapacity;
+    size = 0;
+}
+
+int Inventory::numItems() {
+    return size;
 }
 
 void Inventory::setCapacity(int newCapacity) {
@@ -17,18 +24,34 @@ void Inventory::setCapacity(int newCapacity) {
 }
 
 bool Inventory::add(Item item) {
-    if(cap && inv.size() >= cap)
+    return add(item, item.quantity);
+}
+bool Inventory::add(Item item, int quantity) {
+    if(cap && numItems() + quantity >= cap)
         return false;
-    
+    // if the item already exists in inv, change quantity insead of adding the item.
+    if(contains(item) != -1) {
+        inv[contains(item)].quantity += quantity;
+        return true;
+    }
     inv.push_back(item);
+    size += quantity;
     return true;
 }
 
 bool Inventory::remove(Item item) {
-    int j;
+    return remove(item, 1);
+}
+
+bool Inventory::remove(Item item, int quantity) {
+    int j = 0;
     for(auto i = inv.begin(); i != inv.end(); i++, j++) {
         if(inv[j].equals(item)) {
-            inv.erase(i);
+            if(quantity - item.quantity > 0)
+                item.quantity -= quantity;
+            else
+                inv.erase(i);    
+            size -= item.quantity;
             return true;
         }
     }
@@ -44,9 +67,11 @@ int Inventory::contains(Item item) {
 }
 
 std::string Inventory::toString() {
+    if(inv.size() == 0)
+        return "[ ]";
     std::string toReturn = "[";
     for(int i = 0; i < inv.size() - 1; i++)
         toReturn.append(inv[i].name + ", ");
-    toReturn.append(inv[inv.size()-1].name + "]");
-    return toReturn;
+    toReturn.append(inv[inv.size()-1].name);
+    return toReturn + "]";
 }
