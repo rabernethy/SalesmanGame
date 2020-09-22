@@ -9,7 +9,7 @@ using namespace std;
 /*
 Account(int iBalance, Inventory iInventory):
     desc:
-        --> creates an account with an initial balance and inventory.
+        --> creates an account object with an initial balance and inventory.
         --> object constructor.
         --> public method.
     inputs:
@@ -26,7 +26,7 @@ Account::Account(int iBalance, Inventory iInventory) {
 /*
 Account(Inventory iInventory):
     desc:
-        --> creates an account with an initial inventory.
+        --> creates an account object with an initial inventory.
         --> the account's balance defaults to zero if not specified upon creation.
         --> object constructor.
         --> public method.
