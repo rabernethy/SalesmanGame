@@ -193,7 +193,17 @@ std::string Inventory::toString() {
     return toReturn + "]";
 }
 
-/**/
+/*
+merge(Inventory &toCombine):
+    desc: 
+        --> combines two inventories together.
+        --> public method.
+    input:
+        --> Inventory &toCombine: the inventory to be combined into the inventory.
+    outputs:
+        --> returns true if the merge was sucessful.
+        --> returns false if the merge was unsuccessful.
+*/
 bool Inventory::merge(Inventory &toCombine) {
     if(cap && size + toCombine.size > cap)
         return false;
