@@ -186,7 +186,7 @@ std::string Account::toString() {
 /*
 moveIn(Account &from, Item &item, int quantity):
     desc:
-        --> moves item(s) into an account from another
+        --> moves item(s) into an account from a foreign account.
         --> changes the balances of both accounts to reflect the transaction.
         --> private method.
     inputs:
