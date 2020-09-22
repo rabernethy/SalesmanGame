@@ -3,31 +3,35 @@
 #include <cstdlib>
 #include "item.h"
 #include "inventory.h"
+#include "account.h"
+
 
 using namespace std;
 
 int main(int argc, char ** argv) {
-	printf("Running Tests");
+	printf("Running Tests\n");
 	
 	// Item tests:
 
-	Item a ("Stick", 10, 250, 4);
-	Item b ("Pouch", 25, 80, 10);
+	Item a ("Stick", 10, 250, 4, 1);
+	Item b ("Pouch", 25, 80, 10, 1);
 
 	cout << a.serialize() << endl;
 	cout << b.serialize() << endl;
-	for (int i=0; i<6; i++){
-		printf("Item %s generated price: %d\n", a.name.c_str(), a.genPrice());
-		printf("Item %s generated price: %d\n", b.name.c_str(), b.genPrice());
-	}
-
+	
 	// Inventory tests:
 
 	Inventory inv;
-	inv.add(a);
-	inv.add(b);
+	inv.add(a, 1);
+	inv.add(b, 1);
 
-	printf("The inventory contains %s.\n", inv.toString().c_str());
+	// Account tests:
+	Account acc1(0, inv);
+	Account acc2(1000);
+	acc1.add(10000);
+	
+	printf("Account 1: \n%s\n", acc1.toString().c_str());
+	printf("Account 2: \n%s\n", acc2.toString().c_str());
 
 
 	//Exit peacefully
