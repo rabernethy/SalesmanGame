@@ -224,3 +224,22 @@ bool Account::moveOut(Account &to, Item &item, int quantity) {
     inv.remove(item, quantity);
     return true;
 }
+
+/*
+merge(Account &toCombine):
+    desc:
+        --> merges the funds and inventories of two accounts.
+        --> public method.
+    input: 
+        -->Account &toCombine: the account to merge into the current account.
+    outputs:
+        --> returns true if successful.
+        --> returns false if the merge wasn't possible.
+*/
+bool Account::merge(Account &toCombine) {
+    if(!inv.merge(toCombine.inv))
+        return false;
+    add(toCombine.balance);
+    toCombine.set(0);
+    return true;
+}

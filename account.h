@@ -25,5 +25,6 @@ class Account: public Inventory {
         bool canBuy(Item item); // returns T/F if there is enough currency to buy one of the passed item.
         bool transferIn(Account &from, Item &item, int quantity); // moves item(s) from another account to the current account if possible.
         bool transferOut(Account &to, Item &item, int quantity); // moves item(s) from current account to another account if possible.
+        bool merge(Account &toCombine); //merges two accounts together if possible.
 };
 #endif // !HEADER_ACCOUNT
