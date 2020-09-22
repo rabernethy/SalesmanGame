@@ -50,7 +50,7 @@ genPrice(void):
 		--> returns an int that is the price for which an item is to be sold at.
 */
 int Item::genPrice() {
-	return (rand()%2) ? (1):(-1) * (rand() % fluctuation) + price;
+	return (rand() % 2) ? 1 : (-1) * (rand() % fluctuation) + price;
 }
 
 /*
@@ -66,9 +66,7 @@ equals(Item item):
 		--> returns false if the items are not the same.
 */
 bool Item::equals(Item item) {
-	if(name != item.name)
-		return false;
-	return true;
+	return (name != item.name) ? false : true;
 }
 
 /*
