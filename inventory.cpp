@@ -26,10 +26,10 @@ Inventory(int maxCapacity):
         --> public method.
     input: 
         --> int maxCapacity: the maximum number of individual items that can be stored in the inventory.
-            * if passed a number less <= zero, the inventory will default to a maxCapacity of zero.
+            * if passed a number less < zero, the inventory will default to a maxCapacity of one.
 */
 Inventory::Inventory(int maxCapacity) {
-    (maxCapacity <= 0) ? cap = 0 : cap = maxCapacity;
+    (maxCapacity < 1) ? cap = 1 : cap = maxCapacity;
     size = 0;
 }
 
@@ -56,7 +56,7 @@ setCapacity(int newCapacity):
             * newCapacity cannot be < zero, otherwise it will not be changed.
 */
 void Inventory::setCapacity(int newCapacity) {
-    (newCapacity >= 0) ? cap = newCapacity : true;
+    (newCapacity > 0) ? cap = newCapacity : true;
 }
 
 /*
@@ -191,4 +191,15 @@ std::string Inventory::toString() {
         toReturn.append(inv[i].name + ", ");
     toReturn.append(inv[inv.size()-1].name);
     return toReturn + "]";
+}
+
+/**/
+bool Inventory::merge(Inventory &toCombine) {
+    if(cap && size + toCombine.size > cap)
+        return false;
+    while (toCombine.size != 0) {
+        add(toCombine.inv.back());
+        toCombine.removeAll(toCombine.inv.back());
+    }
+    return true;
 }

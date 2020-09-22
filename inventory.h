@@ -24,5 +24,6 @@ class Inventory {
         void setCapacity(int newCapacity); // changes the capacity to the passed in.
         int contains(Item item); // returns the index of the item or -1 if not found.
         std::string toString(); // returns a string representation of the inventory.
+        bool merge(Inventory &toCombine); // merges two inventories together if possuble.
 };
 #endif // !HEADER_INVENTORY
