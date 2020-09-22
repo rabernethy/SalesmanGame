@@ -77,8 +77,7 @@ remove(int value):
         --> returns the new account balance.
 */
 int Account::remove(int value) {
-    balance -= value;
-    return balance;
+    return balance -= value;
 }
 
 /*
@@ -125,26 +124,17 @@ canBuy(Item item, int quantity):
             * the current account balance is less that the required amount to purchase the full number of items.
 */
 bool Account::canBuy(Item item, int quantity) {
-    // you cannot buy a negative number of items, that's called selling.
-    if(quantity < 0)
-        return false;
-    // not enought items to sell
-    if(quantity > item.quantity)
-        return false;
-    // total cost excedes the current balance
-    if(balance < (item.price * quantity))
-        return false;
-    return true;    
+    return (quantity < 0) ? false : (quantity > item.quantity) ? false : (balance < item.price * quantity) ? false : true;
 }
 
 /*
-transferIn(Account from, Item item, int quantity):
+transferIn(Account &from, Item &item, int quantity):
     desc:
         --> transfers item(s) from a forign account into the current account.
         --> public method.
     inputs:
-        --> Account from: the account where the item(s) are coming from.
-        --> Item item: the item to be transfered into the current account.
+        --> Account &from: the account where the item(s) are coming from.
+        --> Item &item: the item to be transfered into the current account.
         --> int quantity: the desired quantity of the passed item to be transfered into the current account.
     outputs:
         --> returns true when the transefer is successful.
@@ -154,30 +144,17 @@ transferIn(Account from, Item item, int quantity):
             * the current account does not have enough space to buy the item(s).
 */
 bool Account::transferIn(Account &from, Item &item, int quantity) {
-    // check if the item is in the from account.
-    if(from.inv.contains(item) == -1)
-        return false;
-    // check if the item can be bought.
-    if(!canBuy(item, quantity))
-        return false;
-    
-    // move items from one inventory to another.
-    inv.add(item, quantity);
-    remove(item.totalCost(quantity));
-
-    from.add(item.totalCost(quantity));
-    from.inv.remove(item, quantity);
-    return true;
+    return (from.inv.contains(item) == -1) ? false : (!canBuy(item, quantity)) ? false : moveIn(from, item, quantity);
 }
 
 /*
-transferOut(Account to, Item item, int quantity):
+transferOut(Account &to, Item &item, int quantity):
     desc:
-        --> transefers item(s) from the current account into a forign account.
+        --> transefers item(s) from the current account into a foreign account.
         --> public method.
     inputs:
-        --> Account to: the account where the item(s) are going to.
-        --> Item item: teh item to be transfered out of the current account.
+        --> Account &to: the account where the item(s) are going to.
+        --> Item &item: the item to be transfered out of the current account.
         --> int quantity: the desired quantity of the passed item to be transfered out of the current account.
     outputs:
         --> returns true when the transfer is successful.
@@ -187,18 +164,7 @@ transferOut(Account to, Item item, int quantity):
             * the to account does not have enough space to buy the item(s).
 */
 bool Account::transferOut(Account &to, Item &item, int quantity) {
-    // check that the item is in the current account.
-    if(inv.contains(item) == -1)
-        return false;
-    // check if the receiving account has enought money to buy the item(s).
-    if(!to.canBuy(item, quantity))
-        return false;
-    // move items from one inventory to another.
-    to.inv.add(item, quantity);
-    to.remove(item.totalCost(quantity));
-    add(item.totalCost(quantity));
-    inv.remove(item, quantity);
-    return true;
+    return (inv.contains(item) == -1) ? false : (!to.canBuy(item, quantity)) ? false : moveOut(to, item, quantity);
 }
 
 /*
@@ -215,4 +181,46 @@ std::string Account::toString() {
     std::string toReturn = "Balance: " + std::to_string(balance);
     toReturn.append("\nInventory: " + inv.toString());
     return toReturn;
+}
+
+/*
+moveIn(Account &from, Item &item, int quantity):
+    desc:
+        --> moves item(s) into an account from another
+        --> changes the balances of both accounts to reflect the transaction.
+        --> private method.
+    inputs:
+        --> Account &from: the account where the item(s) are coming from.
+        --> Item &item: the item to be transfered into the current account.
+        --> int quantity: the desired quantity of the passed item to be transfered into the current account.
+    output:
+        --> returns true.
+*/
+bool Account::moveIn(Account &from, Item &item, int quantity) {
+    inv.add(item, quantity);
+    remove(item.totalCost(quantity));
+    from.add(item.totalCost(quantity));
+    from.inv.remove(item, quantity);
+    return true;
+}
+
+/*
+moveOut(Account &to, Item &item, int quantity)
+    desc:
+        --> move item(s) from the current account into a foreign account.
+        --> changes the balance of both accounts to reflect the transaction.
+        --> private method.
+    inputs:
+        --> Account &to: the account where the item(s) are going to.
+        --> Item &item: the item to be transfered from the current account.
+        --> int quantity: the desired quantity of the passed item to be transfered into the current account.
+    output:
+        --> returns true.
+*/
+bool Account::moveOut(Account &to, Item &item, int quantity) {
+    to.inv.add(item, quantity);
+    to.remove(item.totalCost(quantity));
+    add(item.totalCost(quantity));
+    inv.remove(item, quantity);
+    return true;
 }
