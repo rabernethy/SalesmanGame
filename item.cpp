@@ -1,3 +1,5 @@
+/* item.cpp, written by James Gottshall */
+
 #include "item.h"
 #include <string>
 #include <cstdlib>
@@ -6,11 +8,12 @@
 // Implementation of item.h
 using namespace std;
 
-Item::Item(std::string iname, int iprice, int ichance, int ifluctuation) {
+Item::Item(std::string iname, int iprice, int ichance, int ifluctuation, int iquantity) {
 	name = iname;
 	price = iprice;
 	chance = ichance;
 	fluctuation = ifluctuation;
+	quantity = iquantity;
 	srand(time(0));
 }
 
@@ -24,8 +27,11 @@ int Item::genPrice() {
 }
 
 bool Item::equals(Item item) {
-	if(name != item.name || price != item.price)
+	if(name != item.name)
 		return false;
 	return true;
 }
 
+int Item::totalCost(int quantity) {
+	return price * quantity;
+}
