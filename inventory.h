@@ -15,12 +15,13 @@ class Inventory {
     public:
         Inventory(); // constructor for bottomless inventory.
         Inventory(int maxCapacity); // constructor for limited inventory.
-        int numItems(); // returns the number of items in the inventory.
-        void setCapacity(int newCapacity); // changes the capacity to the passed in.
         bool add(Item item); // adds an item to the inventory.
         bool add(Item item, int quantity); // adds mutiple items to an inventory.
         bool remove(Item item); // removes an item from the inventory.
         bool remove(Item item, int quantity); // removes multiple items from an inventory.
+        bool removeAll(Item item);
+        int numItems(); // returns the number of items in the inventory.
+        void setCapacity(int newCapacity); // changes the capacity to the passed in.
         int contains(Item item); // returns the index of the item or -1 if not found.
         std::string toString(); // returns a string representation of the inventory.
 };

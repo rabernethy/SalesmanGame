@@ -6,6 +6,7 @@
 #include <vector>
 
 using namespace std;
+
 /*
 Inventory(void):
     desc:
@@ -28,10 +29,7 @@ Inventory(int maxCapacity):
             * if passed a number less <= zero, the inventory will default to a maxCapacity of zero.
 */
 Inventory::Inventory(int maxCapacity) {
-    if(maxCapacity <= 0)
-        cap = 0;
-    else
-        cap = maxCapacity;
+    (maxCapacity <= 0) ? cap = 0 : cap = maxCapacity;
     size = 0;
 }
 
@@ -56,11 +54,9 @@ setCapacity(int newCapacity):
     input:
         --> int newCapacity: the new capacity of the inventory.
             * newCapacity cannot be < zero, otherwise it will not be changed.
-
 */
 void Inventory::setCapacity(int newCapacity) {
-    if(newCapacity >= 0)
-        cap = newCapacity;
+    (newCapacity >= 0) ? cap = newCapacity : true;
 }
 
 /*
@@ -83,6 +79,7 @@ bool Inventory::add(Item item) {
 add(Item item, int quantity):
     desc:
         --> adds the quantity of item to the inventory.
+        --> if the item already exists in the inventory, just change the quantity of that item.
         --> there must be adequate space in the inventory to add an item.
         --> public method.
     inputs:
@@ -95,12 +92,10 @@ add(Item item, int quantity):
 bool Inventory::add(Item item, int quantity) {
     if(cap && numItems() + quantity >= cap)
         return false;
-    // if the item already exists in inv, change quantity insead of adding the item.
-    if(contains(item) != -1) {
+    else if(contains(item) != -1)
         inv[contains(item)].quantity += quantity;
-        return true;
-    }
-    inv.push_back(item);
+    else
+        inv.push_back(item);
     size += quantity;
     return true;
 }
@@ -121,6 +116,20 @@ bool Inventory::remove(Item item) {
 }
 
 /*
+removeAll(Item item):
+    desc:
+        --> removes all of an item from an inventory.
+    input:
+        --> Item item: the item to be removed entirely from an inventory.
+    output:
+        --> return true if the item was completely removed from the inventory.
+        --> return false if the item could not completely be removed from the inventory.
+*/
+bool Inventory::removeAll(Item item) {
+    return remove(item, item.quantity);
+}
+
+/*
 remove(Item item, int quantity):
     desc:
         --> removes the quantity of item from the inventory.
@@ -133,13 +142,12 @@ remove(Item item, int quantity):
         --> returns false if the quantity of item could not be removed from the inventory.
 */
 bool Inventory::remove(Item item, int quantity) {
-    int j = 0;
-    for(auto i = inv.begin(); i != inv.end(); i++, j++) {
-        if(inv[j].equals(item)) {
+    for(int i = 0; i < inv.size(); i++) {
+        if(inv[i].equals(item)) {
             if(quantity - item.quantity > 0)
                 item.quantity -= quantity;
             else
-                inv.erase(i);    
+                inv.erase(inv.begin() + i);    
             size -= item.quantity;
             return true;
         }
