@@ -11,6 +11,9 @@ class Account: public Inventory {
     private:
         int balance;
         Inventory inv;
+        void add(int value); // add funds to balance.
+        void set(int value); // sets the account balance to the passed double.
+        int remove(int value); // remove funds from balance.
     public:
         // constructors for different possiblities.
         Account(int iBalance, Inventory iInventory);
@@ -18,9 +21,6 @@ class Account: public Inventory {
         Account(Inventory iInventory);
         Account(); // initilizes an empty account
         std::string toString(); // returns a string representation of the account.
-        void add(int value); // add funds to balance.
-        void set(int value); // sets the account balance to the passed double.
-        int remove(int value); // remove funds from balance.
         int checkBalance(); // returns the current balance.
         bool canBuy(Item item, int quantity); // returns T/F if there is enough currency to buy the desired number of items.
         bool canBuy(Item item); // returns T/F if there is enough currency to buy one of the passed item.
