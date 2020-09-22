@@ -26,10 +26,9 @@ int main(int argc, char ** argv) {
 	inv.add(b, 1);
 
 	// Account tests:
-	Account acc1(0, inv);
+	Account acc1(10000, inv);
 	Account acc2(1000);
-	acc1.add(10000);
-	
+
 	printf("Account 1: \n%s\n", acc1.toString().c_str());
 	printf("Account 2: \n%s\n", acc2.toString().c_str());
 
