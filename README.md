@@ -1,7 +1,7 @@
 # SalesmanGame
 
 ## Min Viable Product
-- [ ] simple inventory stystem
+- [x] simple inventory stystem
 - [ ] print to screen
   - [ ] message gui
   - [ ] control gui
