@@ -18,7 +18,7 @@ Account(int iBalance, Inventory iInventory):
             * when passing, ensure you pass the right type of inventory (one with or without a max capacity).
             * it is ok if the initial inventory is empty.
 */
-Account::Account(int iBalance, Inventory iInventory) {
+Account::Account(int iBalance, Inventory &iInventory) {
     balance = iBalance;
     inv = iInventory;
 }
@@ -35,7 +35,7 @@ Account(Inventory iInventory):
             * when passing, ensure you pass the right type of inventory (one with or without a max capacity).
             * it is ok if the initial inventory is empty.
 */
-Account::Account(Inventory iInventory) {
+Account::Account(Inventory &iInventory) {
     balance = 0;
     inv = iInventory;
 }
@@ -132,7 +132,7 @@ bool Account::canBuy(Item item, int quantity) {
     if(quantity > item.quantity)
         return false;
     // total cost excedes the current balance
-    if(balance < item.price * quantity)
+    if(balance < (item.price * quantity))
         return false;
     return true;    
 }
@@ -153,16 +153,18 @@ transferIn(Account from, Item item, int quantity):
             * the current account does not have the funds to buy the item(s).
             * the current account does not have enough space to buy the item(s).
 */
-bool Account::transferIn(Account from, Item item, int quantity) {
+bool Account::transferIn(Account &from, Item &item, int quantity) {
     // check if the item is in the from account.
-    if(from.contains(item) == -1)
+    if(from.inv.contains(item) == -1)
         return false;
     // check if the item can be bought.
     if(!canBuy(item, quantity))
         return false;
+    
     // move items from one inventory to another.
     inv.add(item, quantity);
     remove(item.totalCost(quantity));
+
     from.add(item.totalCost(quantity));
     from.inv.remove(item, quantity);
     return true;
@@ -184,9 +186,9 @@ transferOut(Account to, Item item, int quantity):
             * the to account does not have the funds the buy the item(s).
             * the to account does not have enough space to buy the item(s).
 */
-bool Account::transferOut(Account to, Item item, int quantity) {
+bool Account::transferOut(Account &to, Item &item, int quantity) {
     // check that the item is in the current account.
-    if(contains(item) == -1)
+    if(inv.contains(item) == -1)
         return false;
     // check if the receiving account has enought money to buy the item(s).
     if(!to.canBuy(item, quantity))
