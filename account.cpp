@@ -12,17 +12,9 @@ Account::Account(int iBalance, Inventory iInventory) {
     inv = iInventory;
 }
 
-Account::Account(int iBalance) {
-    balance = iBalance;
-}
-
 Account::Account(Inventory iInventory) {
     balance = 0;
     inv = iInventory;
-}
-
-Account::Account() {
-    balance = 0;
 }
 
 void Account::add(int value) {
