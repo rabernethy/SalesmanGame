@@ -90,7 +90,7 @@ add(Item item, int quantity):
         --> returns false if the item could not be added to the inventory.
 */
 bool Inventory::add(Item item, int quantity) {
-    if(cap && numItems() + quantity >= cap)
+    if(cap && size + quantity > cap)
         return false;
     else if(contains(item) != -1)
         inv[contains(item)].quantity += quantity;
