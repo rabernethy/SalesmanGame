@@ -21,7 +21,7 @@ int main(int argc, char ** argv) {
 	
 	// Inventory tests:
 
-	Inventory inv1(2);
+	Inventory inv1;
 	inv1.add(a, 1);
 	inv1.add(b, 1);
 

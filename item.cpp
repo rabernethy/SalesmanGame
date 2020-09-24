@@ -66,7 +66,7 @@ equals(Item item):
 		--> returns false if the items are not the same.
 */
 bool Item::equals(Item item) {
-	return (name != item.name);
+	return name == item.name;
 }
 
 bool Item::operator==(const Item& b) {
