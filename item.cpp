@@ -38,7 +38,7 @@ serialize(void):
 		--> public method.
 */
 std::string Item::serialize() {
-	return name + " @" + to_string(price) + " @" + to_string(chance) + " @" + to_string(fluctuation);
+	return name + " @" + to_string(price) + " @" + to_string(chance) + " @" + to_string(fluctuation) + " @" + to_string(quantity);
 }
 
 /*
@@ -66,7 +66,11 @@ equals(Item item):
 		--> returns false if the items are not the same.
 */
 bool Item::equals(Item item) {
-	return (name != item.name) ? false : true;
+	return (name != item.name);
+}
+
+bool Item::operator==(const Item& b) {
+	return this->name == b.name;
 }
 
 /*
@@ -82,4 +86,11 @@ totalCost(int quantity):
 */
 int Item::totalCost(int quantity) {
 	return price * quantity;
+}
+
+Item Item::operator+(const Item& b) {
+	if (*this == b) {
+		this->quantity += b.quantity;
+	}
+	return *this;
 }

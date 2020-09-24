@@ -44,6 +44,10 @@ int main(int argc, char ** argv) {
 	printf("Account 1: \n%s\n", acc1.toString().c_str());
 	printf("Account 2: \n%s\n", acc2.toString().c_str());
 
+	// Check if item addition works
+	a = a + a;
+	cout << "Item addition test: A="<< a.serialize() << endl;
+
 	//Exit peacefully
 	printf("\n\n\n");
 	return 0;

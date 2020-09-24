@@ -18,6 +18,10 @@ class Item {
 		int genPrice(); // generates the price of the item
 		bool equals(Item item); // returns T/F if two items have the same name and price.
 		int totalCost(int quantity); // returns the total cost of item based on the quantity passed.
+
+		// Overridden Operators
+		bool operator==(const Item& b);
+		Item operator+(const Item& b);
 };
 
 #endif // !HEADER_ITEM
