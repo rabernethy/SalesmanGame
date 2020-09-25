@@ -32,3 +32,6 @@
 *.app
 /main
 /test
+
+# KDE development files
+*.kdev4

@@ -4,8 +4,11 @@
 #include <string>
 #include <cstdlib>
 #include <cstdio>
+#include <sstream>
+#include <cctype>
+#include <algorithm>
+#include <iostream>
 
-using namespace std;
 
 /*
 Item(std::string iName, int iPrice, int iChance, int iFluctuation, int iQuantity):
@@ -31,6 +34,10 @@ Item::Item(std::string iName, int iPrice, int iChance, int iFluctuation, int iQu
 	srand(time(0));
 }
 
+Item::Item(std::string serializedItem) {
+    this->unserialize(serializedItem);
+}
+
 /*
 serialize(void):
 	desc:
@@ -38,7 +45,42 @@ serialize(void):
 		--> public method.
 */
 std::string Item::serialize() {
-	return name + " @" + to_string(price) + " @" + to_string(chance) + " @" + to_string(fluctuation) + " @" + to_string(quantity);
+	return name + "@" + std::to_string(price) + "@" + std::to_string(chance) + "@" + std::to_string(fluctuation) + "@" + std::to_string(quantity) + "@";
+}
+
+/*
+unserialize(istr)
+    desc:
+        --> Converts a serialized item string into an item object
+        --> Overwrites calling item object
+        --> public method
+        
+ */
+Item * Item::unserialize(const std::string& istr) {
+    std::string tokens[5]; 
+    std::string temp = "";
+    int count = 0;
+    for (u_int i = 0; i < istr.length(); i++) {
+        if (istr.at(i) == '@' || istr.at(i) == '\n') {
+            tokens[count] = temp;
+            count++;
+            temp = "";
+        } else {
+            temp += istr.at(i);
+        }
+    }
+    // stoi is by far my least favorite implementation of an int parser
+    try {
+        this->name = tokens[0];
+        this->price = std::stoi(tokens[1]);
+        this->chance = std::stoi(tokens[2]);
+        this->fluctuation = std::stoi(tokens[3]);
+        this->quantity = std::stoi(tokens[4]);
+    } catch (const std::exception& e){
+        std::cout << "stoi is being a bitch again: " << e.what() << std::endl;
+    }
+    
+    return this;
 }
 
 /*

@@ -1,9 +1,11 @@
-/* inventory.cpp, written by Russell Abernethy */
+/* inventory.cpp, written by Russell Abernethy & James Gottshall */
 
 #include "inventory.h"
 #include "item.h"
 #include <cstdlib>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -142,7 +144,7 @@ remove(Item item, int quantity):
         --> returns false if the quantity of item could not be removed from the inventory.
 */
 bool Inventory::remove(Item item, int quantity) {
-    for(int i = 0; i < inv.size(); i++) {
+    for(int i = 0; i < (int)inv.size(); i++) {
         if(inv[i].equals(item)) {
             if(quantity - item.quantity > 0)
                 item.quantity -= quantity;
@@ -167,7 +169,7 @@ contatins(Item item):
         --> returns -1 if the item could not be found in the inventory.
 */
 int Inventory::contains(Item item) {
-    for(int i = 0; i < inv.size(); i++) {
+    for(int i = 0; i < (int)inv.size(); i++) {
         if(inv[i].equals(item))
             return i;
     }
@@ -187,7 +189,7 @@ std::string Inventory::toString() {
     if(inv.size() == 0)
         return "[ ]";
     std::string toReturn = "[";
-    for(int i = 0; i < inv.size() - 1; i++)
+    for(int i = 0; i < (int)inv.size() - 1; i++)
         toReturn.append(inv[i].name + ", ");
     toReturn.append(inv[inv.size()-1].name);
     return toReturn + "]";
@@ -211,5 +213,38 @@ bool Inventory::merge(Inventory &toCombine) {
         add(toCombine.inv.back());
         toCombine.removeAll(toCombine.inv.back());
     }
+    return true;
+}
+
+// exports inventory description as a file, useful for saving Inventory states between sessions
+bool Inventory::exportFile(std::string filename) {
+    ofstream ofile;
+    ofile.open(filename);
+    if (!ofile.is_open()) {return false;}
+    // For each item in the inventory, serialize it and write to ofile
+    for (int i=0; i < (int)inv.size(); i++) {
+        ofile << inv[i].serialize() << "\n";
+    }
+    ofile.close();
+    return true;
+}
+
+// imports inventory from a file. Useful for creating merchant item tables
+bool Inventory::importFile(std::string filename) {
+    std::string line;
+    ifstream ifile (filename);
+    if (!ifile.is_open()) { return false; }
+    
+    // for every line in ifile, add item to inventory
+    while (getline(ifile, line)) {
+        if (line.length() > 5) { // Dumb check to see if it's a valid line since valid lines have at least 5 characters
+            Item itm = Item(line);
+            if (!add(itm, itm.quantity)) {
+                printf("Failed to add item\n"); // should be replaced with logging
+            }
+        }
+    }
+    ifile.close();
+    
     return true;
 }

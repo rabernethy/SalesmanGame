@@ -4,6 +4,7 @@
 /*
    Defines an item class
    Provides an item generator that reads a .itm file
+   Technically defines an itemstack not a single item, since quantity is included
 */
 class Item {
 	public:
@@ -14,7 +15,10 @@ class Item {
 		std::string name; // name of item
 
 		Item(std::string name, int price, int chance, int fluctuation, int quantity); // constructor
+        Item(std::string serializedItem); // serialized item constructor
+        
 		std::string serialize(); // serializes an item.
+        Item * unserialize(const std::string& istr); // Unserializes an item string, then returns a pointer to the item
 		int genPrice(); // generates the price of the item
 		bool equals(Item item); // returns T/F if two items have the same name and price.
 		int totalCost(int quantity); // returns the total cost of item based on the quantity passed.
@@ -22,6 +26,7 @@ class Item {
 		// Overridden Operators
 		bool operator==(const Item& b);
 		Item operator+(const Item& b);
+	
 };
 
 #endif // !HEADER_ITEM
