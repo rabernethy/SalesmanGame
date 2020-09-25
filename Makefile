@@ -6,9 +6,9 @@ CC = g++
 
 CFLAGS = -g -Wall
 LDFLAGS = -lncurses
-HEADER = account.h gui.h inventory.h item.h screen.h
-OBJ = account.o gui.o inventory.o item.o screen.o
-CPPFILES =account.cpp gui.cpp inventory.cpp item.cpp screen.cpp
+HEADER = account.h gui.h inventory.h item.h screen.h utils.h constants.h
+OBJ = account.o gui.o inventory.o item.o screen.o utils.o
+CPPFILES =account.cpp gui.cpp inventory.cpp item.cpp screen.cpp utils.cpp
 
 test: test.o $(OBJ)
 	$(CC) $(CFLAGS) test.o $(OBJ) -o test $(LDFLAGS)

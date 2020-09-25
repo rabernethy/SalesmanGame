@@ -8,7 +8,8 @@
 #include <cctype>
 #include <algorithm>
 #include <iostream>
-
+#include <vector>
+#include "utils.h"
 
 /*
 Item(std::string iName, int iPrice, int iChance, int iFluctuation, int iQuantity):
@@ -34,6 +35,9 @@ Item::Item(std::string iName, int iPrice, int iChance, int iFluctuation, int iQu
 	srand(time(0));
 }
 
+/*
+ * Constructor which builds an item from a serial string
+ */
 Item::Item(std::string serializedItem) {
     this->unserialize(serializedItem);
 }
@@ -57,6 +61,7 @@ unserialize(istr)
         
  */
 Item * Item::unserialize(const std::string& istr) {
+    /*
     std::string tokens[5]; 
     std::string temp = "";
     int count = 0;
@@ -69,6 +74,8 @@ Item * Item::unserialize(const std::string& istr) {
             temp += istr.at(i);
         }
     }
+    */
+    std::vector<std::string> tokens = split(istr, '@');
     // stoi is by far my least favorite implementation of an int parser
     try {
         this->name = tokens[0];
@@ -79,7 +86,6 @@ Item * Item::unserialize(const std::string& istr) {
     } catch (const std::exception& e){
         std::cout << "stoi is being a bitch again: " << e.what() << std::endl;
     }
-    
     return this;
 }
 
@@ -130,6 +136,7 @@ int Item::totalCost(int quantity) {
 	return price * quantity;
 }
 
+// Adds item quantities together if they have the same name
 Item Item::operator+(const Item& b) {
 	if (*this == b) {
 		this->quantity += b.quantity;

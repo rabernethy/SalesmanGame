@@ -240,7 +240,7 @@ bool Inventory::importFile(std::string filename) {
         if (line.length() > 5) { // Dumb check to see if it's a valid line since valid lines have at least 5 characters
             Item itm = Item(line);
             if (!add(itm, itm.quantity)) {
-                printf("Failed to add item\n"); // should be replaced with logging
+                std::cout << "Failed to add item: " << itm.name << " x" << itm.quantity << std::endl; // should be replaced with logging
             }
         }
     }
