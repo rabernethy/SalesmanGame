@@ -1,5 +1,6 @@
 #ifndef HEADER_UTILS
 #define HEADER_UTILS
+
 /*
  * Defines a bunch of utility functions
  */

@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <string>
 #include <vector>
-
+#include "constants.h"
 std::vector<std::string> split(const std::string& istr, char delim=' ') { 
     std::vector<std::string> tokens; 
     std::string temp = "";

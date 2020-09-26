@@ -4,6 +4,7 @@
 #include "item.h"
 #include "inventory.h"
 #include "account.h"
+#include "constants.h"
 
 
 using namespace std;

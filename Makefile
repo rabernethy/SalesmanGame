@@ -4,7 +4,7 @@
 #g++ compiler
 CC = g++
 
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -std=c++11 -D_GNU_SOURCE
 LDFLAGS = -lncurses
 HEADER = account.h gui.h inventory.h item.h screen.h utils.h constants.h
 OBJ = account.o gui.o inventory.o item.o screen.o utils.o

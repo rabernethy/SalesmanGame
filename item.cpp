@@ -61,20 +61,7 @@ unserialize(istr)
         
  */
 Item * Item::unserialize(const std::string& istr) {
-    /*
-    std::string tokens[5]; 
-    std::string temp = "";
-    int count = 0;
-    for (u_int i = 0; i < istr.length(); i++) {
-        if (istr.at(i) == '@' || istr.at(i) == '\n') {
-            tokens[count] = temp;
-            count++;
-            temp = "";
-        } else {
-            temp += istr.at(i);
-        }
-    }
-    */
+
     std::vector<std::string> tokens = split(istr, '@');
     // stoi is by far my least favorite implementation of an int parser
     try {
