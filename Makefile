@@ -1,34 +1,41 @@
+# Written by James Gottshall with much help from stack overflow
+# Big fan of how well this build system works!
+
 #Makefile for Salesmen game
 .DEFAULT_GOAL := main
 
 #g++ compiler
 CC = g++
 
+# Compiler Flags
 CFLAGS = -g -Wall -std=c++11 -D_GNU_SOURCE
-LDFLAGS = -lncurses
-HEADER = account.h gui.h inventory.h item.h screen.h utils.h constants.h
-OBJ = account.o gui.o inventory.o item.o screen.o utils.o
-CPPFILES =account.cpp gui.cpp inventory.cpp item.cpp screen.cpp utils.cpp
+# Linking flags
+LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
-test: test.o $(OBJ)
-	$(CC) $(CFLAGS) test.o $(OBJ) -o test $(LDFLAGS)
+# Setup flags from wildcards
+SOURCES := $(filter-out src/main.cpp, $(filter-out src/test.cpp, $(wildcard src/*.cpp))) # get all cpp files excluding main and test
+INCLUDES := $(wildcard src/*.h)
+OBJECTS := $(SOURCES:src/%.cpp=obj/%.o)
 
-test.o: test.cpp $(HEADER)
-	$(CC) $(CFLAGS) -c test.cpp $(LDFLAGS)
+test: obj/test.o $(OBJECTS)
+	$(CC) $(CFLAGS) obj/test.o $(OBJECTS) -o $@ $(LDFLAGS)
 
-main: main.o $(OBJ)
-	$(CC) $(CFLAGS) main.o $(OBJ) -o main $(LDFLAGS)
+main: obj/main.o $(OBJECTS)
+	$(CC) $(CFLAGS) obj/main.o $(OBJECTS) -o main $(LDFLAGS)
 
-main.o: main.cpp $(HEADER)
-	$(CC) $(CFLAGS) -c main.cpp $(LDFLAGS)
+# I have no idea what I'm doing, compilation I guess?
+$(OBJECTS): obj/%.o : src/%.cpp | obj
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJ): $(CPPFILES) $(HEADER)
-		  $(CC) $(CFLAGS) -c $(CPPFILES)  $(LDFLAGS)
+# Create object folder if it does not exist
+obj:
+	mkdir $@
 
 clean:
-	rm *.o
-	rm test
-	rm main
+	@rm *.o
+	@rm test
+	@rm main
+	@rm -rf object
 
 run:  main
 	./main
