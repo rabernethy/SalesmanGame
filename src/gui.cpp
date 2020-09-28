@@ -11,12 +11,14 @@ MessageBox::MessageBox()
 
 void MessageBox::draw()
 {
+    // TODO: Convert function to sfml
     return;
 }
 
 void MessageBox::write(std::string s)
 {
-   return;
+    // TODO: Convert to sfml
+    return;
 }
 
 
