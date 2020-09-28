@@ -32,10 +32,9 @@ obj:
 	mkdir $@
 
 clean:
-	@rm *.o
-	@rm test
-	@rm main
-	@rm -rf object
+	@-rm -f test
+	@-rm -f main
+	@-rm -rf obj
 
 run:  main
 	./main
