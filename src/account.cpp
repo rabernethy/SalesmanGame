@@ -5,6 +5,7 @@
 #include "inventory.h"
 #include <cstdlib>
 #include <cstdio>
+#include <algorithm>
 
 using namespace std;
 /*
@@ -264,8 +265,18 @@ bool Account::shiftDown()
     return true;
 }
 
-
+// draw function. I'm curious to see how easily I can move this object around in testing.
 void Account::draw(sf::RenderTarget& target, sf::RenderStates state) const
 {
-    
+    // apply the entity's transform
+    state.transform *= getTransform();
+    // Draw the entire item
+    for (int i=0; i < std::min((int)numLines, getSlots()); i++) {
+        // Create Text
+        sf::Text txt(inv[i].name + " x" + std::to_string(inv[i].quantity), font, fontsize);
+        // Position text
+        txt.setPosition(0, i * fontsize);
+        // draw text
+        target.draw(txt, state);
+    }
 }

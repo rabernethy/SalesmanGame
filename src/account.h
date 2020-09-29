@@ -8,7 +8,7 @@ As well it provides helper functions for withdrawing and depositing
 cash between accounts
 */
 
-class Account: protected Inventory, public sf::Drawable {
+class Account: protected Inventory, public sf::Drawable, public sf::Transformable {
     private:
         int balance;
         // Inventory inv;

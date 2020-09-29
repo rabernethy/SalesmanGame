@@ -253,7 +253,7 @@ bool Inventory::importFile(std::string filename) {
     while (getline(ifile, line)) {
         if (line.length() > 5) { // Dumb check to see if it's a valid line since valid lines have at least 5 characters
             Item itm = Item(line);
-            if (!add(itm, itm.quantity)) {
+            if (!add(itm)) { // Changed this to use the non-deprecated add
                 std::cout << "Failed to add item: " << itm.name << " x" << itm.quantity << std::endl; // should be replaced with logging
             }
         }
@@ -263,12 +263,12 @@ bool Inventory::importFile(std::string filename) {
     return true;
 }
 
-int Inventory::getSize()
+int Inventory::getSize() const
 {
     return size;
 }
 
-int Inventory::getSlots()
+int Inventory::getSlots() const
 {
     return inv.size();
 }
