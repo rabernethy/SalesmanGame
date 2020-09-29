@@ -27,6 +27,7 @@ Account::Account(int iBalance) {
         throw "Font File Not Found!";
     numLines = 12;
     fontsize = 16;
+    selected = -1; // None selected by default
 }
 
 // This syntax is strange, not sure if I like it
@@ -189,6 +190,7 @@ moveIn(Account &from, Item &item, int quantity):
     output:
         --> returns true.
 */
+// TODO: add(Item, quantity) is deprecated
 bool Account::moveIn(Account &from, Item item, int quantity) {
     Inventory::add(item, quantity);
     remove(item.totalCost(quantity));
@@ -210,6 +212,7 @@ moveOut(Account &to, Item &item, int quantity)
     output:
         --> returns true.
 */
+// TODO: @Russell add(Item, quantity) is deprecated
 bool Account::moveOut(Account &to, Item item, int quantity) {
     Inventory::add(item, quantity);
     to.remove(item.totalCost(quantity));
@@ -248,6 +251,7 @@ bool Account::merge(Inventory toCombine)
 /*
  * Setters for offset
  */
+// Shifts offset "up" if it is greater then 0
 bool Account::shiftUp() {
     if (offset == 0) {
         return false;
@@ -256,6 +260,7 @@ bool Account::shiftUp() {
     return true;
 }
 
+// Shifts the offset down if there is room to be shifted
 bool Account::shiftDown()
 {
     if (offset >= Inventory::inv.size()) {
@@ -266,6 +271,7 @@ bool Account::shiftDown()
 }
 
 // draw function. I'm curious to see how easily I can move this object around in testing.
+// Future Jimmy - I played around with moving the accounts and needless to say it was pretty awesome
 void Account::draw(sf::RenderTarget& target, sf::RenderStates state) const
 {
     // apply the entity's transform
@@ -276,6 +282,16 @@ void Account::draw(sf::RenderTarget& target, sf::RenderStates state) const
         sf::Text txt(inv[i].name + " x" + std::to_string(inv[i].quantity), font, fontsize);
         // Position text
         txt.setPosition(0, i * fontsize);
+        // If selected element then draw selection rectangle
+        if (selected == i){
+            sf::Rect<float> lb = txt.getLocalBounds();
+            // txt.getLocalBounds() returns a rect object that apparently can't be drawn as a rectangle
+            // Very frustrating
+            sf::RectangleShape selRec(sf::Vector2f(lb.width + 4, lb.height));
+            selRec.setPosition(-1, i * fontsize + lb.height / 2);
+            selRec.setFillColor(sf::Color::Red); // Set selector color
+            target.draw(selRec, state);
+        }
         // draw text
         target.draw(txt, state);
     }

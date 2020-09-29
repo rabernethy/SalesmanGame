@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     Account playerAcc(2500);
     playerAcc.merge(playerInv); // currently merge is the only way to indiscriminately add items to an account
     playerAcc.setPosition(200,50);
-    sf::Vector2f velocity(10,6);
+    sf::Vector2f velocity(5, 0);
     
     // Create clock for delta-time
     sf::Clock deltaClock;
@@ -56,7 +56,21 @@ int main(int argc, char** argv)
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
                     mb.write("Click at x: " + std::to_string(event.mouseButton.x) + " y: " + std::to_string(600 - event.mouseButton.y), sf::Color(event.mouseButton.x/3,100,50));
-                    velocity = velocity* -1.5f;
+                    velocity = velocity* -1.0f;
+                }
+            }
+            // Handle key press events
+            if (event.type == sf::Event::KeyPressed) {
+                switch (event.key.code) {
+                    case sf::Keyboard::W:
+                        playerAcc.selected--;
+                        break;
+                    case sf::Keyboard::S:
+                        playerAcc.selected++;
+                        break;
+                    default:
+                        // Compiler will complain if there isn't a default case.
+                        break;
                 }
             }
         }

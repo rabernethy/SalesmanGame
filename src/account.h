@@ -41,5 +41,6 @@ public:
         u_int fontsize; // Fontsize to draw the inventory items - default: 16
         bool shiftUp(); // Moves offset up
         bool shiftDown(); // Moves offset down
+        int selected; // Selected inventory space. Set to -1 for none.
 };
 #endif // !HEADER_ACCOUNT
