@@ -17,11 +17,21 @@ SOURCES := $(filter-out src/main.cpp, $(filter-out src/test.cpp, $(wildcard src/
 INCLUDES := $(wildcard src/*.h)
 OBJECTS := $(SOURCES:src/%.cpp=obj/%.o)
 
+# Compile Tests
 test: obj/test.o $(OBJECTS)
 	$(CC) $(CFLAGS) obj/test.o $(OBJECTS) -o $@ $(LDFLAGS)
 
+# Compile main
 main: obj/main.o $(OBJECTS)
 	$(CC) $(CFLAGS) obj/main.o $(OBJECTS) -o main $(LDFLAGS)
+	
+# build test
+obj/test.o: src/test.cpp 
+	$(CC) $(CFLAGS) -c $< -o $@
+	
+# build main
+obj/main.o: src/main.cpp | obj
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # I have no idea what I'm doing, compilation I guess?
 $(OBJECTS): obj/%.o : src/%.cpp | obj
