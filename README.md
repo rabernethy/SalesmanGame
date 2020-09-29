@@ -3,13 +3,13 @@
 ## Min Viable Product
 - [x] simple inventory stystem
 - [ ] print to screen
-  - [ ] message gui
+  - [x] message gui
   - [ ] control gui
   - [ ] game screen
 - [ ] Cash
   - [ ] Fluctuations
   - [ ] World Seed
-- [ ] Item definition format
-  - [ ] base cost
-  - [ ] fluctuation
+- [x] Item definition format
+  - [x] base cost
+  - [x] fluctuation
   - [ ] frequency function
