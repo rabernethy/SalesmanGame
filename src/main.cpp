@@ -20,6 +20,11 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     sf::Text text("To Be Continued...", font, 50);
     
+    // Create MessageBox
+    MessageBox mb(font, 10);
+    mb.write("Hello World");
+    mb.write("Lorem Ipsum");
+    
     // start game loop
     while (window.isOpen()) {
         // Process Events
@@ -35,7 +40,7 @@ int main(int argc, char** argv)
         window.clear();
         
         // Draw the string
-        window.draw(text);
+        window.draw(mb);
         
         // Update Window
         window.display();
