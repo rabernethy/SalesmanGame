@@ -288,7 +288,7 @@ void Account::draw(sf::RenderTarget& target, sf::RenderStates state) const
             // txt.getLocalBounds() returns a rect object that apparently can't be drawn as a rectangle
             // Very frustrating
             sf::RectangleShape selRec(sf::Vector2f(lb.width + 4, lb.height));
-            selRec.setPosition(-1, i * fontsize + lb.height / 2);
+            selRec.setPosition(-1, i * fontsize + lb.height / 2); // set position so the rectangle actually draws behind the text
             selRec.setFillColor(sf::Color::Red); // Set selector color
             target.draw(selRec, state);
         }
