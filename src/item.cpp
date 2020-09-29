@@ -28,11 +28,12 @@ Item(std::string iName, int iPrice, int iChance, int iFluctuation, int iQuantity
 */
 Item::Item(std::string iName, int iPrice, int iChance, int iFluctuation, int iQuantity) {
 	name = iName;
-	price = iPrice;
 	chance = iChance;
 	fluctuation = iFluctuation;
 	quantity = iQuantity;
 	srand(time(0));
+    basePrice = iPrice;
+    realPrice = iPrice;
 }
 
 /*
@@ -49,7 +50,8 @@ serialize(void):
 		--> public method.
 */
 std::string Item::serialize() {
-	return name + "@" + std::to_string(price) + "@" + std::to_string(chance) + "@" + std::to_string(fluctuation) + "@" + std::to_string(quantity) + "@";
+	return name + "@" + std::to_string(basePrice) + "@" + std::to_string(chance) + "@" + std::to_string(fluctuation) + "@" 
+    + std::to_string(quantity) + "@" + std::to_string(realPrice) + "@";
 }
 
 /*
@@ -61,16 +63,23 @@ unserialize(istr)
         
  */
 Item * Item::unserialize(const std::string& istr) {
-
+    // split string into tokens based on the '@' delimiter
     std::vector<std::string> tokens = split(istr, '@');
     // stoi is by far my least favorite implementation of an int parser
     try {
         this->name = tokens[0];
-        this->price = std::stoi(tokens[1]);
+        this->basePrice = std::stoi(tokens[1]);
         this->chance = std::stoi(tokens[2]);
         this->fluctuation = std::stoi(tokens[3]);
         this->quantity = std::stoi(tokens[4]);
+        // To keep compatibility with item files made in the old format, ie: without realPrice
+        if (tokens.size() > 5) {
+            this->realPrice = std::stoi(tokens[5]);
+        } else {
+            this->realPrice = basePrice;
+        }
     } catch (const std::exception& e){
+        // I hope I never have to see this error again. stoi is a fickle mistress.
         std::cout << "stoi is being a bitch again: " << e.what() << std::endl;
     }
     return this;
@@ -82,10 +91,13 @@ genPrice(void):
 		--> generates the selling price of an item based on the items base price and the fluctuation.
 		--> public method.
 	output:
+        --> sets realPrice to the fluctuated value
 		--> returns an int that is the price for which an item is to be sold at.
 */
 int Item::genPrice() {
-	return (rand() % 2) ? 1 : (-1) * (rand() % fluctuation) + price;
+    // I think there is probably a better function to fluctuate prices. TODO: write better function ;)
+	realPrice = (rand() % 2) ? 1 : (-1) * (rand() % fluctuation) + basePrice;
+    return realPrice;
 }
 
 /*
@@ -120,7 +132,7 @@ totalCost(int quantity):
 		--> returns the total cost of purchasing the desired quantity of item.
 */
 int Item::totalCost(int quantity) {
-	return price * quantity;
+	return realPrice * quantity;
 }
 
 // Adds item quantities together if they have the same name
