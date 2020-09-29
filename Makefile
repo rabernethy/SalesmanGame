@@ -26,7 +26,7 @@ main: obj/main.o $(OBJECTS)
 	$(CC) $(CFLAGS) obj/main.o $(OBJECTS) -o main $(LDFLAGS)
 	
 # build test
-obj/test.o: src/test.cpp 
+obj/test.o: src/test.cpp | obj
 	$(CC) $(CFLAGS) -c $< -o $@
 	
 # build main

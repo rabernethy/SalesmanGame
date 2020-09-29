@@ -32,7 +32,7 @@ Inventory(int maxCapacity):
 */
 Inventory::Inventory(int maxCapacity) {
     (maxCapacity < 1) ? cap = 1 : cap = maxCapacity;
-    size = 0;
+    Inventory();
 }
 
 /*
@@ -74,7 +74,14 @@ add(Item item):
         --> returns false if the item could not be added to the inventory.
 */
 bool Inventory::add(Item item) {
-    return add(item, 1);
+    // TODO: Re-add size check
+    if (contains(item) != -1) {
+        inv[contains(item)].quantity += item.quantity;
+    } else {
+        inv.push_back(item);
+    }
+    size += item.quantity;
+    return true;
 }
 
 /*
@@ -91,8 +98,10 @@ add(Item item, int quantity):
         --> returns true if the item was successfully added to the inventory.
         --> returns false if the item could not be added to the inventory.
 */
+
+// DEPRECATED
 bool Inventory::add(Item item, int quantity) {
-    if(cap && size + quantity > cap)
+    if((cap != 0) && ((size + quantity) > cap))
         return false;
     else if(contains(item) != -1)
         inv[contains(item)].quantity += quantity;
@@ -190,8 +199,8 @@ std::string Inventory::toString() {
         return "[ ]";
     std::string toReturn = "[";
     for(int i = 0; i < (int)inv.size() - 1; i++)
-        toReturn.append(inv[i].name + ", ");
-    toReturn.append(inv[inv.size()-1].name);
+        toReturn.append(inv[i].name +" x"+ std::to_string(inv[i].quantity) +", ");
+    toReturn.append(inv[inv.size()-1].name + " x" + std::to_string(inv[inv.size()-1].quantity));
     return toReturn + "]";
 }
 
@@ -206,12 +215,17 @@ merge(Inventory &toCombine):
         --> returns true if the merge was sucessful.
         --> returns false if the merge was unsuccessful.
 */
-bool Inventory::merge(Inventory &toCombine) {
-    if(cap && size + toCombine.size > cap)
-        return false;
-    while (toCombine.size != 0) {
-        add(toCombine.inv.back());
-        toCombine.removeAll(toCombine.inv.back());
+bool Inventory::merge(Inventory& toCombine) { 
+    // Changed toCombine to be pass by value, hopefully this fixes the "phantom bug"
+    //if(cap && (size + toCombine.getSize() > cap))
+    //   return false; // Commented out while searching for phantom bug - BINGO
+    // Earlier issues seem to have come from above, we need logging badly for failed attempts @Russell
+    
+    // I've taken the liberty to rewrite this, sorry not sorry - Jimmy
+    for (int i=0; i < toCombine.getSlots(); i++) {
+        Item newItem = toCombine.inv[i]; // Copy constructor
+        add(newItem);
+        // toCombine.removeAll(toCombine.inv.back()); BAD @Russell -- I have a feeling this kinda thing is what's killing us
     }
     return true;
 }
@@ -248,3 +262,14 @@ bool Inventory::importFile(std::string filename) {
     
     return true;
 }
+
+int Inventory::getSize()
+{
+    return size;
+}
+
+int Inventory::getSlots()
+{
+    return inv.size();
+}
+

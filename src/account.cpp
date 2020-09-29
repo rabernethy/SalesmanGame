@@ -1,4 +1,5 @@
 /* account.cpp, written by Russell Abernethy */
+/* Improved by James Gottshall :) */
 
 #include "account.h"
 #include "inventory.h"
@@ -9,36 +10,27 @@ using namespace std;
 /*
 Account(int iBalance, Inventory iInventory):
     desc:
+        --> MASTER CONSTRUCTOR
         --> creates an account object with an initial balance and inventory.
         --> object constructor.
         --> public method.
     inputs:
         --> int iBalance: the initial account balance.
-        --> Inventory iInventory: the initial account inventory.
-            * when passing, ensure you pass the right type of inventory (one with or without a max capacity).
-            * it is ok if the initial inventory is empty.
+    README: Account used to have an inventory variable but account, IS an inventory so it does not need a variable for one as well. This will likely break things.
 */
-Account::Account(int iBalance, Inventory &iInventory) {
+Account::Account(int iBalance) {
     balance = iBalance;
-    inv = iInventory;
+    
+    // Set/load defaults
+    if (!font.loadFromFile("assets/cnr.otf")) // Should probably replace this with a constant, as in the font path
+        throw "Font File Not Found!";
+    numLines = 12;
+    fontsize = 16;
 }
 
-/*
-Account(Inventory iInventory):
-    desc:
-        --> creates an account object with an initial inventory.
-        --> the account's balance defaults to zero if not specified upon creation.
-        --> object constructor.
-        --> public method.
-    input:
-        --> Inventory iInventory: the initial account inventory.
-            * when passing, ensure you pass the right type of inventory (one with or without a max capacity).
-            * it is ok if the initial inventory is empty.
-*/
-Account::Account(Inventory &iInventory) {
-    balance = 0;
-    inv = iInventory;
-}
+// This syntax is strange, not sure if I like it
+Account::Account() : Account{0} {}
+
 
 /*
 add(int value):
@@ -104,7 +96,7 @@ canBuy(Item item):
         --> returns false if the item cannot be bought.
 */
 bool Account::canBuy(Item item) {
-    return canBuy(item, 1);
+    return canBuy(item, item.quantity);
 }
 
 /*
@@ -143,8 +135,8 @@ transferIn(Account &from, Item &item, int quantity):
             * the current account does not have the funds to buy the item(s).
             * the current account does not have enough space to buy the item(s).
 */
-bool Account::transferIn(Account &from, Item &item, int quantity) {
-    return (from.inv.contains(item) == -1) ? false : (!canBuy(item, quantity)) ? false : moveIn(from, item, quantity);
+bool Account::transferIn(Account &from, Item item, int quantity) {
+    return (from.contains(item) == -1) ? false : (!canBuy(item, quantity)) ? false : moveIn(from, item, quantity);
 }
 
 /*
@@ -163,8 +155,8 @@ transferOut(Account &to, Item &item, int quantity):
             * the to account does not have the funds the buy the item(s).
             * the to account does not have enough space to buy the item(s).
 */
-bool Account::transferOut(Account &to, Item &item, int quantity) {
-    return (inv.contains(item) == -1) ? false : (!to.canBuy(item, quantity)) ? false : moveOut(to, item, quantity);
+bool Account::transferOut(Account &to, Item item, int quantity) {
+    return (contains(item) == -1) ? false : (!to.canBuy(item, quantity)) ? false : moveOut(to, item, quantity);
 }
 
 /*
@@ -179,7 +171,7 @@ toString(void):
 */
 std::string Account::toString() {
     std::string toReturn = "Balance: " + std::to_string(balance);
-    toReturn.append("\nInventory: " + inv.toString());
+    toReturn.append("\nInventory: " + Inventory::toString());
     return toReturn;
 }
 
@@ -196,11 +188,11 @@ moveIn(Account &from, Item &item, int quantity):
     output:
         --> returns true.
 */
-bool Account::moveIn(Account &from, Item &item, int quantity) {
-    inv.add(item, quantity);
+bool Account::moveIn(Account &from, Item item, int quantity) {
+    Inventory::add(item, quantity);
     remove(item.totalCost(quantity));
     from.add(item.totalCost(quantity));
-    from.inv.remove(item, quantity);
+    Inventory::remove(item, quantity);
     return true;
 }
 
@@ -217,11 +209,11 @@ moveOut(Account &to, Item &item, int quantity)
     output:
         --> returns true.
 */
-bool Account::moveOut(Account &to, Item &item, int quantity) {
-    to.inv.add(item, quantity);
+bool Account::moveOut(Account &to, Item item, int quantity) {
+    Inventory::add(item, quantity);
     to.remove(item.totalCost(quantity));
     add(item.totalCost(quantity));
-    inv.remove(item, quantity);
+    Inventory::remove(item, quantity);
     return true;
 }
 
@@ -236,10 +228,44 @@ merge(Account &toCombine):
         --> returns true if successful.
         --> returns false if the merge wasn't possible.
 */
-bool Account::merge(Account &toCombine) {
-    if(!inv.merge(toCombine.inv))
+// NOTE: please do not destroy or edit other things in functions, pretty sure that's what's causing these bugs
+bool Account::merge(Account toCombine) {
+    if(!Inventory::merge(toCombine))
         return false;
     add(toCombine.balance);
-    toCombine.set(0);
+    //toCombine.set(0); Wonder if this helps...
     return true;
+} 
+
+// Inventory merge
+bool Account::merge(Inventory toCombine)
+{
+    return Inventory::merge(toCombine);
+}
+
+
+/*
+ * Setters for offset
+ */
+bool Account::shiftUp() {
+    if (offset == 0) {
+        return false;
+    }
+    offset--;
+    return true;
+}
+
+bool Account::shiftDown()
+{
+    if (offset >= Inventory::inv.size()) {
+        return false;
+    }
+    offset++;
+    return true;
+}
+
+
+void Account::draw(sf::RenderTarget& target, sf::RenderStates state) const
+{
+    
 }
