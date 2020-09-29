@@ -27,7 +27,7 @@ class Inventory {
         bool merge(Inventory& toCombine); // merges two inventories together if possible.
         bool exportFile(std::string filename);
         bool importFile(std::string filename);
-        int getSize(); // getter for size
-        int getSlots(); // Returns the number of slots in the inventory
+        int getSize() const; // getter for size
+        int getSlots() const; // Returns the number of slots in the inventory
 };
 #endif // !HEADER_INVENTORY
