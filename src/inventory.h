@@ -9,9 +9,9 @@ Manages a list of items, as well as provides inventory helper functions
 class Inventory {
     protected:
         std::vector<Item> inv; // vector to keep track of items.
-    private:
         int cap; // max num items allowed in an inventory.
         int size; // num items in the inventory.
+        
     public:
         Inventory(); // constructor for bottomless inventory.
         Inventory(int maxCapacity); // constructor for limited inventory.
@@ -24,8 +24,10 @@ class Inventory {
         void setCapacity(int newCapacity); // changes the capacity to the passed in.
         int contains(Item item); // returns the index of the item or -1 if not found.
         std::string toString(); // returns a string representation of the inventory.
-        bool merge(Inventory &toCombine); // merges two inventories together if possible.
+        bool merge(Inventory& toCombine); // merges two inventories together if possible.
         bool exportFile(std::string filename);
         bool importFile(std::string filename);
+        int getSize(); // getter for size
+        int getSlots(); // Returns the number of slots in the inventory
 };
 #endif // !HEADER_INVENTORY

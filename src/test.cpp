@@ -33,11 +33,18 @@ int main(int argc, char ** argv) {
 	// Inventory tests:
 
 	Inventory inv1;
-	inv1.add(a, 1);
-	inv1.add(b, 1);
+	inv1.add(a);
+	inv1.add(b);
 
 	Inventory inv2;
-	inv2.add(a, 1);
+	inv2.add(a);
+    
+    // Is it Inventory or account making problems?
+    cout << "Inventory 1: " << inv1.toString() << ", Inventory 2: " << inv2.toString() << endl;
+    
+    // Try an inventory merge to see if that's where the issue is
+    inv1.merge(inv2);
+    cout << "Merge test: " << inv1.toString() << endl;
 
     // Import test
     Inventory invImport;
@@ -47,9 +54,12 @@ int main(int argc, char ** argv) {
     cout << "Inventory size: " << invImport.numItems() << endl;
     
 	// Account tests:
-	Account acc1(10000, inv1);
-	Account acc2(10000, inv2);
+	Account acc1(10000);
+	Account acc2(10000);
     
+    // Because of inheritance this should work to initialize inventories
+    acc1.merge(inv1);
+    acc2.merge(inv2);
 
 	printf("\nBefore Transfer:\n");
 	printf("Account 1: \n%s\n", acc1.toString().c_str());
