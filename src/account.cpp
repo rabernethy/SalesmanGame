@@ -118,7 +118,7 @@ canBuy(Item item, int quantity):
             * the current account balance is less that the required amount to purchase the full number of items.
 */
 bool Account::canBuy(Item item, int quantity) {
-    return (quantity < 0) ? false : (quantity > item.quantity) ? false : (balance < item.price * quantity) ? false : true;
+    return (quantity < 0) ? false : (quantity > item.quantity) ? false : (balance < item.basePrice * quantity) ? false : true;
 }
 
 /*
@@ -290,9 +290,23 @@ void Account::draw(sf::RenderTarget& target, sf::RenderStates state) const
             sf::RectangleShape selRec(sf::Vector2f(lb.width + 4, lb.height));
             selRec.setPosition(-1, i * fontsize + lb.height / 2); // set position so the rectangle actually draws behind the text
             selRec.setFillColor(sf::Color::Red); // Set selector color
-            target.draw(selRec, state);
+            target.draw(selRec, state); // Draw the Rectangle
         }
         // draw text
         target.draw(txt, state);
     }
 }
+
+// Vender just stores a representation of a Vendor
+Vendor::Vendor(std::string name, sf::Vector2i location)
+{
+    this->name = name;
+    this->location = location;
+}
+
+Vendor::Vendor::Vendor(std::string name)
+{
+    this->name = name;
+}
+
+

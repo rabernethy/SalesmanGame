@@ -11,6 +11,7 @@ class Item {
 		int basePrice; // item price
 		int fluctuation; // An int that represents the amount the price can fluctuate, ie the final price could be any amount +/- this number
 		int chance; // Chance to spawn out of a hundred, Each vendor rolls to spawn items and numbers over a hundred are more likely to be chosen mutliple times. Due to chance though items may spawn multiple times even when rare. (Implementation Dependent though, may change)
+		/* Yeah chance does not work that way. */
 		int quantity; // number of items
 		std::string name; // name of item
 		int realPrice; // Price set by fluctuate

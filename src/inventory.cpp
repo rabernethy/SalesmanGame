@@ -273,3 +273,21 @@ int Inventory::getSlots() const
     return inv.size();
 }
 
+Item Inventory::randItem()
+{
+    long totWeight = 0; // Totes weight, lol.
+    for (u_int16_t i=0; i < inv.size(); i++) {
+        totWeight += inv[i].chance;
+    }
+    // This is a cool algorithm for weighted random
+    long weight = rand() % totWeight;
+    for (u_int16_t i=0; i < inv.size(); i++) {
+        weight -= inv[i].chance;
+        if (weight <= 0) {
+            return inv[i];
+        }
+    }
+    return inv[0]; // This better not happen lol
+}
+
+

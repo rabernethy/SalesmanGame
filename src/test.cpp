@@ -76,6 +76,11 @@ int main(int argc, char ** argv) {
 	// Check if item addition works
 	a = a + a;
 	cout << "Item addition test: A="<< a.serialize() << endl;
+    
+    // Random Item test
+    for (int i=0; i<5; i++) {
+        cout << "Random Item: " << invImport.randItem().serialize() << endl;
+    }
 
     inv1.exportFile("base.itm");
     

@@ -29,5 +29,6 @@ class Inventory {
         bool importFile(std::string filename);
         int getSize() const; // getter for size
         int getSlots() const; // Returns the number of slots in the inventory
+        Item randItem(); // Returns a random item from the inventory based on item weights
 };
 #endif // !HEADER_INVENTORY

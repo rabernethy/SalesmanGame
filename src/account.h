@@ -43,4 +43,13 @@ public:
         bool shiftDown(); // Moves offset down
         int selected; // Selected inventory space. Set to -1 for none.
 };
+
+class Vendor: public Account {
+public:
+    Vendor(std::string name, sf::Vector2i location);
+    Vendor(std::string name);
+    sf::Vector2i location;
+    std::string name;
+};
+
 #endif // !HEADER_ACCOUNT
