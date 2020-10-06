@@ -10,7 +10,6 @@ cash between accounts
 
 class Account: protected Inventory, public sf::Drawable, public sf::Transformable {
     private:
-        int balance;
         // Inventory inv;
         void add(int value); // add funds to balance.
         void set(int value); // sets the account balance to the passed double.
@@ -22,6 +21,7 @@ class Account: protected Inventory, public sf::Drawable, public sf::Transformabl
         // This is protected since the window management system does some funky stuff with this. IDK RTFM.
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates state) const;
+    int balance;
 
 public:
         Account(int iBalance); // constructor when there is
@@ -46,15 +46,17 @@ public:
 };
 
 class Vendor: public Account {
+private:
+    sf::Vector2i location;
 public:
     Vendor(std::string name, sf::Vector2i location);
-    Vendor(std::string name);
-    sf::Vector2i location;
+    Vendor(std::string name, int balance = 0);
     std::string name;
     bool generate(Inventory genList, int iterations = 10, int maxdist = 50); // runs Account::populate and generates a random vector location
     int dist(Vendor v); // get distance to vendor
     int dist(sf::Vector2i v); //get distance to vector
     void newLocation(int maxdist); // generate a new Vector with a maximum distance from [0,0]
+    std::string getLocation() // returns string of location, for debug purposes
 };
 
 #endif // !HEADER_ACCOUNT

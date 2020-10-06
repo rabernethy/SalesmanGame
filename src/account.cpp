@@ -320,10 +320,14 @@ Vendor::Vendor(std::string name, sf::Vector2i location)
     this->location = location;
 }
 
-Vendor::Vendor(std::string name)
+// balance defaults to 0
+Vendor::Vendor(std::string name, int balance)
 {
+    Account::balance = balance;
     this->name = name;
+    srand(time(0));
 }
+
 
 // wrapper function to generate Vendor data
 bool Vendor::generate(Inventory genList, int iterations, int maxdist)
@@ -335,7 +339,7 @@ bool Vendor::generate(Inventory genList, int iterations, int maxdist)
 // Distance between Vendor and given vector
 int Vendor::dist(sf::Vector2i v)
 {
-    return sqrt(pow(v.x-location.x, 2) + pow(v.y-location.y,2));
+    return sqrt(pow(v.x - location.x, 2) + pow(v.y - location.y, 2));
 }
 
 // Distance between self and another Vendor
@@ -350,9 +354,20 @@ void Vendor::newLocation(int maxdist)
     sf::Vector2i zero(0,0);
     // Generate random vectors bounded by maxdist until one is within the maxdist range, hopefully this doesn't hang
     do {
-        location = sf::Vector2i(rand() % maxdist, rand() % maxdist);
+        this->location = sf::Vector2i(rand() % maxdist, rand() % maxdist);
     } while (dist(zero) > maxdist);
+    if (location == zero) {
+        // apparently this check doesn't even work, WTF!
+        std::cerr << "What the heck, new locations for vendors supposed to be random." << std::endl;
+    }
 }
+
+std::string Vendor::getLocation()
+{
+    // really a to_string, for debug purposes
+    return "{" + to_string(location.x) + ", " + to_string(location.y) + "}";
+}
+
 
 
 
