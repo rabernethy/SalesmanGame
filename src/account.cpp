@@ -5,7 +5,9 @@
 #include "inventory.h"
 #include <cstdlib>
 #include <cstdio>
+#include <iostream>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 /*
@@ -297,16 +299,60 @@ void Account::draw(sf::RenderTarget& target, sf::RenderStates state) const
     }
 }
 
-// Vender just stores a representation of a Vendor
+bool Account::populate(Inventory genList, int iterations)
+{
+    // Add items to self
+    for (int i=0; i<iterations; i++) {
+        if (!Inventory::add(genList.randItem())) {
+            // cerr, probably easier to use this then implement some fancy pants logging
+            std::cerr << "Failed to Add item when populating Account" << std::endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+
+// Vendor just stores a representation of a Vendor
 Vendor::Vendor(std::string name, sf::Vector2i location)
 {
     this->name = name;
     this->location = location;
 }
 
-Vendor::Vendor::Vendor(std::string name)
+Vendor::Vendor(std::string name)
 {
     this->name = name;
 }
+
+// wrapper function to generate Vendor data
+bool Vendor::generate(Inventory genList, int iterations, int maxdist)
+{
+    newLocation(maxdist);
+    return populate(genList, iterations);
+}
+
+// Distance between Vendor and given vector
+int Vendor::dist(sf::Vector2i v)
+{
+    return sqrt(pow(v.x-location.x, 2) + pow(v.y-location.y,2));
+}
+
+// Distance between self and another Vendor
+int Vendor::dist(Vendor v)
+{
+    return dist(v.location);
+}
+
+// generate new location within maxdist from [0,0]
+void Vendor::newLocation(int maxdist)
+{
+    sf::Vector2i zero(0,0);
+    // Generate random vectors bounded by maxdist until one is within the maxdist range, hopefully this doesn't hang
+    do {
+        location = sf::Vector2i(rand() % maxdist, rand() % maxdist);
+    } while (dist(zero) > maxdist);
+}
+
 
 

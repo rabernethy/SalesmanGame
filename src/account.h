@@ -34,6 +34,7 @@ public:
         bool transferOut(Account &to, Item item, int quantity); // moves item(s) from current account to another account if possible.
         bool merge(Account toCombine); //merges two accounts together if possible.
         bool merge(Inventory toCombine); // merges inventory with account using inventory merge function
+        bool populate(Inventory genList, int iterations = 10); // picks itemStacks from genList based on the random Inventory item function, and populates the list with as many itemStacks specified by iterations
         
         // Display related members
         sf::Font font; // Leaving this public incase someone wants to edit, but it'll be our default font (CNR) unless changed
@@ -50,6 +51,10 @@ public:
     Vendor(std::string name);
     sf::Vector2i location;
     std::string name;
+    bool generate(Inventory genList, int iterations = 10, int maxdist = 50); // runs Account::populate and generates a random vector location
+    int dist(Vendor v); // get distance to vendor
+    int dist(sf::Vector2i v); //get distance to vector
+    void newLocation(int maxdist); // generate a new Vector with a maximum distance from [0,0]
 };
 
 #endif // !HEADER_ACCOUNT

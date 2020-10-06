@@ -16,7 +16,7 @@ class Inventory {
         Inventory(); // constructor for bottomless inventory.
         Inventory(int maxCapacity); // constructor for limited inventory.
         bool add(Item item); // adds an item to the inventory.
-        bool add(Item item, int quantity); // adds mutiple items to an inventory.
+        bool add(Item item, int quantity); // adds mutiple items to an inventory. DEPREDATED: to be removed
         bool remove(Item item); // removes an item from the inventory.
         bool remove(Item item, int quantity); // removes multiple items from an inventory.
         bool removeAll(Item item);
