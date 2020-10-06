@@ -29,12 +29,25 @@ int main(int argc, char** argv)
     mb.write("Lorem Ipsum");
     mb.write("MessageBox Height Is: " + std::to_string(mb.getHeight()));
     
+    // Initialize Vendor List
+    Inventory baselist;
+    baselist.importFile("item_definitions/base.itm");
+    std::vector<Vendor> vendors;
+    vendors.push_back(Vendor("John"));
+    vendors.push_back(Vendor("Paul"));
+    vendors.push_back(Vendor("George"));
+    vendors.push_back(Vendor("Ringo"));
+    // So glad C++11 added a foreach
+    for (Vendor v: vendors) {
+        v.generate(baselist); // generate vendors
+    }
+    
     // Setup Inventory to merge into account
     Inventory playerInv;
     playerInv.importFile("item_definitions/player.itm");
     
     // Setup accounts
-    Account playerAcc(2500);
+    Vendor playerAcc("player", 2500);
     playerAcc.merge(playerInv); // currently merge is the only way to indiscriminately add items to an account
     playerAcc.setPosition(200,50);
     sf::Vector2f velocity(5, 0);
@@ -67,6 +80,16 @@ int main(int argc, char** argv)
                         break;
                     case sf::Keyboard::S:
                         playerAcc.selected++;
+                        break;
+                    case sf::Keyboard::V:
+                        for (Vendor v: vendors) {
+                            mb.write("Distance to " + v.name+" is " + std::to_string(v.dist(playerAcc)));
+                            mb.write("\t to string: " + v.toString());
+                        }
+                        break;
+                    case sf::Keyboard::L:
+                        for (Vendor v: vendors)
+                            mb.write(v.name + " is at " + std::to_string(v.location.x) + ", " + std::to_string(v.location.y));
                         break;
                     default:
                         // Compiler will complain if there isn't a default case.

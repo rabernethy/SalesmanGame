@@ -5,6 +5,7 @@
 #include "inventory.h"
 #include "account.h"
 #include "constants.h"
+#include <vector>
 
 
 using namespace std;
@@ -17,6 +18,28 @@ void testSerial() {
     cout << "Item b, made with unserialize: " << b.serialize() << endl;
     cout << "ending serialization tests" << endl;
 }
+
+void vendorTest() {
+    cout << endl << "-- Running Vendor Test --" << endl;
+    cout << "Importing Vendor genlist" << endl;
+    Inventory genlist;
+    genlist.importFile("item_definitions/base.itm");
+    cout << "Creating Vendors" << endl;
+    vector<Vendor> vendors;
+    vendors.push_back(Vendor("Matthew"));
+    vendors.push_back(Vendor("Mark"));
+    vendors.push_back(Vendor("Luke"));
+    vendors.push_back(Vendor("John"));
+    for (Vendor v: vendors) {
+        cout << "Generating vendor " << v.name << endl;
+        v.generate(genlist);
+        cout << "Location: " << v.getLocation() << endl;
+        cout << "Account toString(): " << v.toString() << endl;
+    }
+    
+    cout << endl;
+}
+
 
 int main(int argc, char ** argv) {
 	printf("Running Tests\n");
@@ -83,6 +106,8 @@ int main(int argc, char ** argv) {
     }
 
     inv1.exportFile("base.itm");
+    
+    vendorTest();
     
 	//Exit peacefully
 	printf("\n\n\n");

@@ -56,7 +56,7 @@ public:
     int dist(Vendor v); // get distance to vendor
     int dist(sf::Vector2i v); //get distance to vector
     void newLocation(int maxdist); // generate a new Vector with a maximum distance from [0,0]
-    std::string getLocation() // returns string of location, for debug purposes
+    std::string getLocation(); // returns string of location, for debug purposes
 };
 
 #endif // !HEADER_ACCOUNT
