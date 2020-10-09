@@ -12,4 +12,4 @@
 - [x] Item definition format
   - [x] base cost
   - [x] fluctuation
-  - [ ] frequency function
+  - [x] frequency function
