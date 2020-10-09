@@ -17,7 +17,8 @@ class Account: protected Inventory, public sf::Drawable, public sf::Transformabl
         bool moveIn(Account &from, Item item, int quantity); // helper method to move items into current account. Always returns true.
         bool moveOut(Account &to, Item item, int quantity); // helper method to move items into a different account. Always returns true.
         u_int offset; // offset in the list, for display purposes
-
+        int selected; // Selected inventory space. Set to -1 for none.
+        
         // This is protected since the window management system does some funky stuff with this. IDK RTFM.
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates state) const;
@@ -42,7 +43,7 @@ public:
         u_int fontsize; // Fontsize to draw the inventory items - default: 16
         bool shiftUp(); // Moves offset up
         bool shiftDown(); // Moves offset down
-        int selected; // Selected inventory space. Set to -1 for none.
+        int select(int index); // select item, returns the actual index selected
 };
 
 class Vendor: public Account {

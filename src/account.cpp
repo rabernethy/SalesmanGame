@@ -30,6 +30,7 @@ Account::Account(int iBalance) {
     numLines = 12;
     fontsize = 16;
     selected = -1; // None selected by default
+    offset = 0;
 }
 
 // This syntax is strange, not sure if I like it
@@ -279,18 +280,18 @@ void Account::draw(sf::RenderTarget& target, sf::RenderStates state) const
     // apply the entity's transform
     state.transform *= getTransform();
     // Draw the entire item
-    for (int i=0; i < std::min((int)numLines, getSlots()); i++) {
+    for (u_int16_t i=offset; i < std::min((int)numLines + (int)offset, getSlots()); i++) {
         // Create Text
         sf::Text txt(inv[i].name + " x" + std::to_string(inv[i].quantity), font, fontsize);
         // Position text
-        txt.setPosition(0, i * fontsize);
+        txt.setPosition(0, (i-offset) * fontsize);
         // If selected element then draw selection rectangle
         if (selected == i){
             sf::Rect<float> lb = txt.getLocalBounds();
             // txt.getLocalBounds() returns a rect object that apparently can't be drawn as a rectangle
             // Very frustrating
             sf::RectangleShape selRec(sf::Vector2f(lb.width + 4, lb.height));
-            selRec.setPosition(-1, i * fontsize + lb.height / 2); // set position so the rectangle actually draws behind the text
+            selRec.setPosition(-1, (i-offset) * fontsize + lb.height / 2); // set position so the rectangle actually draws behind the text
             selRec.setFillColor(sf::Color::Red); // Set selector color
             target.draw(selRec, state); // Draw the Rectangle
         }
@@ -302,7 +303,7 @@ void Account::draw(sf::RenderTarget& target, sf::RenderStates state) const
 bool Account::populate(Inventory genList, int iterations)
 {
     // Add items to self
-    for (int i=0; i<iterations; i++) {
+    for (u_int16_t i=0; i<iterations; i++) {
         if (!Inventory::add(genList.randItem())) {
             // cerr, probably easier to use this then implement some fancy pants logging
             std::cerr << "Failed to Add item when populating Account" << std::endl;
@@ -310,6 +311,25 @@ bool Account::populate(Inventory genList, int iterations)
         }
     }
     return true;
+}
+
+int Account::select(int index) {
+    if (index > (int)inv.size()) {
+        selected = inv.size();
+    }
+    else if (index < 0) {
+        selected = -1;
+    } else {
+        selected = index;
+    }
+    // Apply offset based on new selection
+    if (selected >= (int)numLines + (int)offset) {
+        offset = selected - numLines + 1;
+    }
+    if (selected!=-1 && selected < (int)offset) {
+        offset = selected;
+    }
+    return selected;
 }
 
 

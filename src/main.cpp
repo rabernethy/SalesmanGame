@@ -55,12 +55,14 @@ int main(int argc, char** argv)
     Vendor playerAcc("player", 2500);
     playerAcc.merge(playerInv); // currently merge is the only way to indiscriminately add items to an account
     playerAcc.setPosition(200,50);
+    playerAcc.numLines = 3;
     sf::Vector2f velocity(5, 0);
     
     // Create clock for delta-time
     sf::Clock deltaClock;
     sf::Time dt = deltaClock.restart(); // dt is delta time
     bool running = true;
+    int selector = -1;
     
     // start game loop
     while (window.isOpen() && running) {
@@ -82,10 +84,12 @@ int main(int argc, char** argv)
             if (event.type == sf::Event::KeyPressed) {
                 switch (event.key.code) {
                     case sf::Keyboard::W:
-                        playerAcc.selected--;
+                        selector--;
+                        selector = playerAcc.select(selector);
                         break;
                     case sf::Keyboard::S:
-                        playerAcc.selected++;
+                        selector++;
+                        selector = playerAcc.select(selector);
                         break;
                     case sf::Keyboard::V:
                         for (Vendor v: vendors) {
