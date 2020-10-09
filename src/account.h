@@ -46,9 +46,8 @@ public:
 };
 
 class Vendor: public Account {
-private:
-    sf::Vector2i location;
 public:
+    sf::Vector2i location;
     Vendor(std::string name, sf::Vector2i location);
     Vendor(std::string name, int balance = 0);
     std::string name;

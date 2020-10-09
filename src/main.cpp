@@ -3,6 +3,7 @@
 #include <math.h>
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <iostream>
 #ifdef WIN32
 #include <Windows.h>
 #else
@@ -38,9 +39,13 @@ int main(int argc, char** argv)
     vendors.push_back(Vendor("George"));
     vendors.push_back(Vendor("Ringo"));
     // So glad C++11 added a foreach
-    for (Vendor v: vendors) {
-        v.generate(baselist); // generate vendors
+    // ^^^ This comment is now ironic, as the foreach loop apparently makes temporary references of some sort to classes so you can't change their data.
+    // Oops, that was pretty dumb, but like also kinda sucks
+    for (u_int16_t i=0; i<vendors.size(); i++) {
+        vendors[i].generate(baselist);
     }
+    
+    std::cerr << "name: " << vendors[1].name;
     
     // Setup Inventory to merge into account
     Inventory playerInv;
@@ -55,9 +60,10 @@ int main(int argc, char** argv)
     // Create clock for delta-time
     sf::Clock deltaClock;
     sf::Time dt = deltaClock.restart(); // dt is delta time
+    bool running = true;
     
     // start game loop
-    while (window.isOpen()) {
+    while (window.isOpen() && running) {
         // Process Events
         sf::Event event;
         while (window.pollEvent(event))
@@ -83,13 +89,16 @@ int main(int argc, char** argv)
                         break;
                     case sf::Keyboard::V:
                         for (Vendor v: vendors) {
-                            mb.write("Distance to " + v.name+" is " + std::to_string(v.dist(playerAcc)));
+                            mb.write("Distance to " + v.name + " is " + std::to_string(v.dist(playerAcc)));
                             mb.write("\t to string: " + v.toString());
                         }
                         break;
                     case sf::Keyboard::L:
                         for (Vendor v: vendors)
-                            mb.write(v.name + " is at " + std::to_string(v.location.x) + ", " + std::to_string(v.location.y));
+                            mb.write(v.name + " is at " + v.getLocation());
+                        break;
+                    case sf::Keyboard::Q:
+                        running = false;
                         break;
                     default:
                         // Compiler will complain if there isn't a default case.
