@@ -325,7 +325,7 @@ Vendor::Vendor(std::string name, int balance)
 {
     Account::balance = balance;
     this->name = name;
-    srand(time(0));
+    srand(time(NULL));
 }
 
 

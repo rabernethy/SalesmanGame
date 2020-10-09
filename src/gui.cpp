@@ -30,6 +30,11 @@ void MessageBox::write(std::string s)
 // write with color
 void MessageBox::write(std::string s, sf::Color c)
 {
+    std::size_t found = s.find("\n");
+    if (found!=std::string::npos) {
+        write(s.substr(found+1), c);
+        s = s.substr(0, found);
+    }
     // Shift lines up one index
     for (int i=size-1; i>0; i--) {
         lines[i] = lines[i-1];

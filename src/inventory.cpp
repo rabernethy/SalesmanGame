@@ -247,14 +247,17 @@ bool Inventory::exportFile(std::string filename) {
 bool Inventory::importFile(std::string filename) {
     std::string line;
     ifstream ifile (filename);
-    if (!ifile.is_open()) { return false; }
+    if (!ifile.is_open()) { 
+        std::cerr << "Could Not Open File: " << filename << std::endl;
+        return false; 
+    }
     
     // for every line in ifile, add item to inventory
     while (getline(ifile, line)) {
         if (line.length() > 5) { // Dumb check to see if it's a valid line since valid lines have at least 5 characters
             Item itm = Item(line);
             if (!add(itm)) { // Changed this to use the non-deprecated add
-                std::cout << "Failed to add item: " << itm.name << " x" << itm.quantity << std::endl; // should be replaced with logging
+                std::cerr << "Failed to add item: " << itm.name << " x" << itm.quantity << std::endl; // should be replaced with logging
             }
         }
     }
