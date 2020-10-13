@@ -354,6 +354,7 @@ bool Vendor::generate(Inventory genList, int iterations, int maxdist)
 {
     newLocation(maxdist);
     return populate(genList, iterations);
+    // TODO: starting balance when 0 should be a random number between the totalcost of the inventory / 8 and the totalcost / 2
 }
 
 // Distance between Vendor and given vector
